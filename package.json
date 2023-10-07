@@ -9,12 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/typography": "0.5.10",
+    "daisyui": "^3.9.2",
     "gbx": "^0.6.0",
     "next": "13.5.4",
     "react": "^18",
     "react-dom": "^18",
-    "@tailwindcss/typography": "0.5.10",
-    "daisyui": "^3.9.2"
+    "react-hook-form": "^7.47.0",
+    "react-icons": "^4.11.0"
   },
   "devDependencies": {
     "@types/node": "^20",
