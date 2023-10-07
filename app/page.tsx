@@ -60,7 +60,7 @@ export default function Home() {
   }, [mapCount, uids])
 
 const command =
-    `/tmx add ${uids.join(" ")}`;
+    `//nadeo add ${uids.join(" ")}`;
 
   return (
     <main>
