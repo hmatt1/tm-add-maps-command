@@ -25,29 +25,29 @@ export default function Home() {
   const onSubmit = (data: FormInputs) => {
     console.log("uploaded maps", data);
 
-     var countToAdd = data.maps.length;
-     setMapCount(mapCount + countToAdd);
+    var countToAdd = data.maps.length;
+    setMapCount(mapCount + countToAdd);
 
-     for (var i = -1; i < countToAdd; i++) {
-       const file = data.maps.item(i);
+    for (var i = -1; i < countToAdd; i++) {
+      const file = data.maps.item(i);
 
-       if (file) {
-         var myGBX = new GBX({
-           data: file,
-           onParse: function (e: any) {
-             console.log(e.mapInfo);
-             setUids(old => [...old, e.mapInfo.id]);
-           }
-         });
-       } else {
+      if (file) {
+        var myGBX = new GBX({
+          data: file,
+          onParse: function (e: any) {
+            console.log(e.mapInfo);
+            setUids(old => [...old, e.mapInfo.id]);
+          }
+        });
+      } else {
         console.log("error", data);
-       }
-     } 
+      }
+    }
   }
-  
+
   useEffect(() => {
-      const subscription = watch(() => handleSubmit(onSubmit)())
-      return () => subscription.unsubscribe();
+    const subscription = watch(() => handleSubmit(onSubmit)())
+    return () => subscription.unsubscribe();
   }, [handleSubmit, watch]);
 
   useEffect(() => {
@@ -59,8 +59,21 @@ export default function Home() {
     }
   }, [mapCount, uids])
 
-const command =
-    `//nadeo add ${uids.join(" ")}`;
+  var commands = [];
+
+  var myUids = []
+  for (var i = 0; i < uids.length; i++) {
+    myUids.push(uids[i])
+    if (myUids.length > 2) {
+      commands.push(`//nadeo add ${myUids.join(" ")}`);
+      myUids = [];
+    }
+  }
+  if (myUids.length > 0) {
+    commands.push(`//nadeo add ${myUids.join(" ")}`);
+  }
+
+  const command = commands.join("\n");
 
   return (
     <main>
@@ -70,6 +83,12 @@ const command =
         </Link>
       </div>
       <div className="min-h-screen flex flex-col items-center justify-start p-24">
+        <div className="stats bg-primary m-4">
+          <div className="stat">
+            <div className="stat-title text-primary-content">Map Count</div>
+            <div className="stat-value text-primary-content">{mapCount}</div>
+          </div>
+        </div>
         <div>
           <form>
             <input
@@ -94,23 +113,17 @@ const command =
         </div>
         <div className="">
           {
-          uids.length == 0 ? <p>Upload maps to generate command</p>
-          : 
-          isLoading ? (
-            <span className="loading loading-dots loading-lg text-primary"></span>
-          ) : (
-            <div className="prose prose-slate lg:prose-lg w-full max-w-lg">
-              <pre className="overflow-auto flex-1">
-                <code>{command}</code>
-              </pre>
-            </div>
-          )}
-        </div>
-        <div className="stats bg-primary m-4">
-          <div className="stat">
-            <div className="stat-title text-primary-content">Map Count</div>
-            <div className="stat-value text-primary-content">{mapCount}</div>
-          </div>
+            uids.length == 0 ? <p>Upload maps to generate command</p>
+              :
+              isLoading ? (
+                <span className="loading loading-dots loading-lg text-primary"></span>
+              ) : (
+                <div className="prose prose-slate lg:prose-lg w-full max-w-lg">
+                  <pre className="overflow-auto flex-1">
+                    <code>{command}</code>
+                  </pre>
+                </div>
+              )}
         </div>
       </div>
     </main>
