@@ -75,6 +75,8 @@ export default function Home() {
 
   const command = commands.join("\n");
 
+  const commandWithAll = `//nadeo add ${uids.join(" ")}`;
+
   return (
     <main>
       <div className="flex flex-row w-full justify-end">
@@ -118,11 +120,24 @@ export default function Home() {
               isLoading ? (
                 <span className="loading loading-dots loading-lg text-primary"></span>
               ) : (
+                <>
+                <h3>
+                  All on one line
+                </h3>
+                <div className="prose prose-slate lg:prose-lg w-full max-w-lg">
+                  <pre className="overflow-auto flex-1">
+                    <code>{commandWithAll}</code>
+                  </pre>
+                </div>
+                <h3>
+                  Multiple lines
+                </h3>
                 <div className="prose prose-slate lg:prose-lg w-full max-w-lg">
                   <pre className="overflow-auto flex-1">
                     <code>{command}</code>
                   </pre>
                 </div>
+                </>
               )}
         </div>
       </div>
